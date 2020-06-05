@@ -1,0 +1,185 @@
+\ProvidesPackage{style}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+\usepackage{dsfont}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{framed}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage[utf8]{inputenc}
+\usepackage{ltablex}
+\usepackage{makecell}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{units}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\usepackage{sectsty}
+\usepackage{soul}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{wrapfig}
+\usepackage{fixmath}
+
+%%%%%%%%%%
+% Colors %
+%%%%%%%%%%
+\definecolor{shadecolor}{rgb}{.9,.9,.9}
+
+%%%%%%%%%%%%%%%%
+% Environments %
+%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+
+\newtheorem{thm}{Theorem}[subsection]
+\newtheorem*{thm*}{Theorem}
+\def\thmautorefname{Theorem}
+
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem*{lem*}{Lemma}
+\def\lemautorefname{Lemma}
+
+\newtheorem{claim}[thm]{Claim}
+\newtheorem*{claim*}{Claim}
+\def\claimautorefname{Claim}
+
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem*{cor*}{Corollary}
+\def\corautorefname{Corollary}
+
+
+\theoremstyle{definition}
+
+\newtheorem{defn}[thm]{Definition}
+\newtheorem*{defn*}{Definition}
+\def\defnautorefname{Definition}
+
+
+\theoremstyle{remark}
+
+\newtheorem{remark}[thm]{Remark}
+\newtheorem*{remark*}{Remark}
+\def\remarkautorefname{Remark}
+
+
+%%%%%%%%%%%%%
+% Operators %
+%%%%%%%%%%%%%
+\DeclareMathOperator{\mmod}{mod}
+\DeclareMathOperator*{\argmax}{argmax}
+
+%%%%%%%%%%%%
+% Commands %
+%%%%%%%%%%%%
+
+% Probability
+\newcommand{\pr}[2][]{\operatorname*{Pr}_{#1} \sqbr*{#2}}
+\newcommand{\ex}[2][]{\operatorname*{\mathbb{E}}_{#1} \sqbr*{#2}}
+
+% Formatting
+\newcommand{\txt}{\text}
+\newcommand{\trm}{\textrm}
+\newcommand{\tsf}{\textsf}
+\newcommand{\tmd}{\textmd}
+\newcommand{\tbf}{\textbf}
+\newcommand{\tup}{\textup}
+\newcommand{\tit}{\textit}
+\newcommand{\tsl}{\textsl}
+\newcommand{\tsc}{\textsc}
+\newcommand{\ttt}{\texttt}
+
+\newcommand{\mrm}{\mathrm}
+\newcommand{\mmit}{\mathit}
+\newcommand{\mnorm}{\mathnormal}
+\newcommand{\mcal}{\mathcal}
+\newcommand{\mscr}{\mathscr}
+\newcommand{\mbb}{\mathbb}
+\newcommand{\mfrak}{\mathfrak}
+
+% Sets of numbers
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\FF}{\mathbb{F}}
+
+% Types
+\newcommand{\var}{\textrm}
+\renewcommand{\vec}{\mathbf}
+\newcommand{\str}[1]{\texttt{``#1''}}
+\newcommand{\cc}{\mathbf}
+\newcommand{\lang}{\textsc}
+\newcommand{\code}{\mathsf}
+
+% Complexity classes
+\newcommand{\NP}{\cc{NP}}
+\newcommand{\coNP}{\cc{coNP}}
+\newcommand{\PP}{\cc{P}}
+\newcommand{\NL}{\cc{NL}}
+\newcommand{\MAJPP}{\cc{MAJPP}}
+\newcommand{\ZPP}{\cc{ZPP}}
+\newcommand{\RP}{\cc{RP}}
+\newcommand{\coRP}{\cc{coRP}}
+\newcommand{\EE}{\cc{E}}
+\newcommand{\BPP}{\cc{BPP}}
+
+% Languages
+\newcommand{\SAT}{\lang{SAT}}
+\newcommand{\UNSAT}{\lang{UNSAT}}
+\newcommand{\ThCOL}{\lang{3COL}}
+\newcommand{\FCOL}{\lang{4COL}}
+
+% Codes
+\newcommand{\WH}{\code{WH}}
+\newcommand{\RM}{\code{RM}}
+
+% Functions
+\newcommand{\sign}[1]{\operatorname{sign} \paren*{#1}}
+\newcommand{\TIME}[1]{\operatorname{TIME} \paren*{#1}}
+\newcommand{\poly}[1]{\operatorname{poly} \paren*{#1}}
+\newcommand{\polylog}[1]{\operatorname{polylog} \paren*{#1}}
+\newcommand{\perm}[1]{\operatorname{Perm} \paren*{#1}}
+\newcommand{\im}[1]{\operatorname{Im} \paren*{#1}}
+\newcommand{\dist}[2]{\delta \paren*{#1, #2}}
+\newcommand{\edist}[2]{\hat{\delta} \paren*{#1, #2}}
+\newcommand{\p}[2][]{p_{#1} \paren*{#2}}
+\newcommand{\bunch}[1]{B \paren*{#1}}
+\newcommand{\cluster}[1]{C \paren*{#1}}
+\newcommand{\ind}[1]{\operatorname{\mathds{1}} \sqbr{#1}}
+
+% Asymptotic Notation
+\newcommand{\bigo}[1]{O \paren*{#1}}
+\newcommand{\bigtheta}[1]{\Theta \paren*{#1}}
+\newcommand{\bigomega}[1]{\Omega \paren*{#1}}
+\newcommand{\bigotilde}[1]{\tilde{O} \paren*{#1}}
+\newcommand{\smallo}[1]{o \paren*{#1}}
+\newcommand{\smallomega}[1]{\omega \paren*{#1}}
+
+% Other
+\newcommand{\TODO}[1]{\textcolor{red}{\hl{[TODO: #1]}}}
+\newcommand{\zo}{\curl{0,1}}
+\newcommand{\spt}{\textsuperscript}
+\newcommand{\nfrac}{\nicefrac}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Paired delimiters %
+%%%%%%%%%%%%%%%%%%%%%
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}%
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}%
+\DeclarePairedDelimiter{\curl}{\{}{\}}%
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}%
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}%
+\DeclarePairedDelimiter{\paren}{(}{)}%
+\DeclarePairedDelimiter{\sqbr}{[}{]}%
