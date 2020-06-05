@@ -1,21 +1,51 @@
 \documentclass[table]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{styles}
-\usepackage{xcolor}
-\usepackage{tabularx}
-\usepackage{tikz}
-\usetikzlibrary{matrix}
-\usetikzlibrary{backgrounds}
+\usepackage{style}
 
 \title{Oracle Quantum Computing}
 \author{Joshua Spayd}
 \date{\today}
 
 \begin{document}
-
 \maketitle
-
 \begin{multicols}{2}
+
 \section{Introduction}
+
+\TODO{Start with example from quantum mechanics that motivates quantum
+  computers. Use {\cite{AB09}}.}
+
+
+\section{Modeling quantum computation}
+
+\TODO{Mostly refer to {\cite{Wig19}} here, maybe some {\cite{AB09}}.}
+
+\subsection{Quantum Turing machines}
+
+\subsection{Describing quantum algorithms}
+
+\subsection{The class $\BQP$}
+
+\TODO{Define $\BQP$ and place it relative to $\BPP$ (theorem) and $\NP$
+  (conjecture). Then describe what we will prove.}
+
+
+\section{Quantum oracles}
+\TODO{Refer to {\cite{BBBV97}}.}
+
+\section{Two interesting results}
+
+\subsection{Quantum can beat nondeterminism \cite{BB92}}
+
+\subsection{Quantum does not buy nondeterminism \cite{BBBV97}}
+
+
+\section{Further reading}
+
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{bibliography}
+
 \end{multicols}
 \end{document}

@@ -1,5 +1,5 @@
-TEX := pdflatex
-TEXFLAGS := -shell-escape
+TEX := latexmk
+TEXFLAGS := -pdf
 SRCDIR := src
 OUTDIR := out
 
@@ -11,7 +11,6 @@ all: $(OUT)
 
 $(OUTDIR)/%.pdf: $(SRCDIR)/%.tex
 	mkdir -p $(OUTDIR)
-	cd $(SRCDIR) && $(TEX) $(TEXFLAGS) --output-directory=../$(OUTDIR) $(<:$(SRCDIR)/%=%)
 	cd $(SRCDIR) && $(TEX) $(TEXFLAGS) --output-directory=../$(OUTDIR) $(<:$(SRCDIR)/%=%)
 
 .PHONY: clean
