@@ -28,7 +28,7 @@ of the feasibility and relative efficiency of quantum computers are yet
 unanswered, this uncertainty has not prevented theorists from developing
 quantum computational models. In this paper, we will formalize quantum computing
 and quantum oracles, and then we will describe a few results from quantum
-complexity theory, with emphasis on the result from \cite{BB92} that relative to
+complexity theory, with emphasis on the result from \cite{BB92a} that relative to
 certain oracles, quantum computers are more powerful than nondeterministic
 computers, or in the words of  Berthiaume and Brassard, that ``quantum can beat
 nondeterminism.''
@@ -312,19 +312,89 @@ easier to follow.
 Given \cref{conj:np-bqp} and \cref{thm:no-black-box}, the following result may
 be surprising.
 
-\begin{thm}[\cite{BB92}]
-  Under appropriate oracles, there is a decision problem that can be solved in
-  polynomial time on a quantum computer that would require exponential time on a
-  classical nondeterministic computer.
+\begin{thm}[\cite{BB92a}]
+  \label{thm:bqp-beat-np}
+  There exists an oracle relative to which there is a set that can be recognized
+  in worst-case linear time by a quantum computer, yet any nondeterministic
+  Turing machine that accepts it must take exponential time on infinitely many
+  inputs.
 \end{thm}
-The authors of \cite{BB92} call this ``quantum can beat nondeterminism,'' and it
+The authors of \cite{BB92a} call this ``quantum can beat nondeterminism,'' and it
 is this result that we will prove in the remainder of this paper.
 
-\section{Quantum oracles}
-\TODO{Refer to {\cite{BBBV97}}.}
+\section{Quantum can beat nondeterminism \cite{BB92a}}
 
+The proof of \cref{thm:bqp-beat-np} given in \cite{BB92a} relies on the following
+theorem.
 
-\section{Quantum can beat nondeterminism \cite{BB92}}
+\begin{thm}[\cite{DJ92}]
+  \label{thm:promise}
+  Let $f : \zo^* \to \zo$ be a function with the property that for all $n$, one
+  of the following is true:
+  \begin{enumerate}[label=(\arabic*)]
+    \item $f(x) = 0$ for all $x \in \zo^n$; or
+    \item $f(x) = 1$ for exactly $2^{n-1}$ strings $x \in \zo^n$.
+  \end{enumerate}
+  Suppose that there is a classical algorithm for computing $f$ in time
+  $\bigo{t(n)}$ for all $x$ of length $n$, where $t(n) \ge n$ for all $n$. Then
+  a quantum computer can decide in worst-case time $\bigo{t(n)}$ whether or not
+  $f(x)$ is identically zero on inputs of length $n$.\footnote{Though this
+  theorem is based on a result in \cite{DJ92}, this particular formulation of
+  the result comes from \cite{BB92b}.}
+\end{thm}
+
+We do not prove \cref{thm:promise} here, but we recommend that curious readers
+refer to \cite{DJ92}, which provides a fairly straightforward proof. Our proof
+of \cref{thm:bqp-beat-np} proceeds by using an enumeration of all
+nondeterministic Turing machines to construct a function that has the properties
+given in \cref{thm:promise} so that with an oracle for $f$, on input $n$, a
+quantum computer can decide in polynomial time if $f(x)=0$ for all $x\in \zo^n$,
+but no nondeterministic Turing machine can decide the same problem. \TODO{Is the
+input $n$?}
+
+\begin{mdframed}
+\begin{proof}[Proof of \cref{thm:bqp-beat-np}]
+  Let $N_1, N_2, \dots$ be a standard enumeration of all nondeterministic Turing
+  machines, and let $\alpha : \NN \to \NN$ be some function such that for every
+  $i \in \NN$, there are infinitely many $n \in \NN$ such that $\alpha(n) = i$.
+  Finally, let $\wp : \NN \to \NN$ be defined as
+  $$
+    \wp(n) = \begin{cases}
+              1            & \text{if $n=1$} \\
+              2^{\wp(n-1)} & \text{if $n>1$}.
+             \end{cases}
+  $$
+  We use these to construct a function $f$ that has the properties described
+  above. In particular, we define $f$ by a set $Y = \curl*{x\in \zo^* \mid
+  f(x)=1}$, i.e. $Y$ is the language decided by an oracle for $f$. We construct
+  $Y$ in stages, constructing $Y_1, Y_2, \dots$ such that $Y = \bigcup_{n\ge 1}
+  Y_n$. At the end of stage $n$, $Y$ will be defined for all strings of length
+  less than $\wp(n+1)$. We sometimes refer to $Y$ and each $Y_n$ as oracles, by
+  which we mean oracles that indicate membership in the sets $Y$ and $Y_n$
+  respectively. \TODO{Add intuitive explanation of what we add at each stage.}
+  Our construction is as follows:
+  \begin{enumerate}
+    \item Initially, set $Y_1=\emptyset$.
+    \item At stage $n \ge 1$, simulate every path of nondeterministic machine
+      $N_{\alpha(n)}$ on input $1^{\wp(n)}$ with oracle $Y_n$ for up to
+      $2^{\wp(n)-1}$ steps for each path.
+      \begin{itemize}
+        \item If there is a path that makes the machine exceed $2^{\wp(n)-1}$
+          steps, or if the machine rejects, set $Y_{n+1}=Y_n$ and go to the next
+          stage.
+        \item If the machine accepts within $2^{\wp(n)-1}$ steps, select an
+          arbitrary accepting path and let $Q_n$ be the set of oracle questions
+          asked along that path. Because of the time bound on the computation,
+          note that $Q_n$ contains no more than $2^{\wp(n)-1}$ questions, and
+          none of these questions can be of length greater than $2^{\wp(n)-1}$.
+          But there are $2^{\wp(n)}$ strings of length $\wp(n)$, and therefore
+          we can form a set $R_n \subset \zo^{\wp(n)}$ such that $R_n \cap
+          Q_n = \emptyset$ and the number of elements in $R_n$ is exactly
+          $2^{\wp(n)-1}$. Let $Y_{n+1} = Y_n \cup R_n$ and go to the next stage.
+      \end{itemize}
+  \end{enumerate}
+\end{proof}
+\end{mdframed}
 
 
 \nocite{*}
