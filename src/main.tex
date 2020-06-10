@@ -324,33 +324,36 @@ is this result that we will prove in the remainder of this paper.
 
 \section{Quantum can beat nondeterminism \cite{BB92a}}
 
-The proof of \cref{thm:bqp-beat-np} given in \cite{BB92a} relies on the following
-theorem.
+The proof of \cref{thm:bqp-beat-np} given in \cite{BB92a} relies on a theorem
+from \cite{DJ92}. Let $X \subseteq \zo^*$ be a language. We say that $B(X)$
+holds if for all $n$, one of the following is true:
+\begin{enumerate}[label=(\arabic*)]
+  \item $X \cap \zo^n = \emptyset$ (i.e., $X$ contains no strings of length
+    $n$); or
+  \item $\abs*{X \cap \zo^n} = 2^{n-1}$ (i.e., $X$ contains exactly $2^{n-1}$
+    strings of length $n$).
+\end{enumerate}
+Then the theorem is as follows.
 
 \begin{thm}[\cite{DJ92}]
   \label{thm:promise}
-  Let $f : \zo^* \to \zo$ be a function with the property that for all $n$, one
-  of the following is true:
-  \begin{enumerate}[label=(\arabic*)]
-    \item $f(x) = 0$ for all $x \in \zo^n$; or
-    \item $f(x) = 1$ for exactly $2^{n-1}$ strings $x \in \zo^n$.
-  \end{enumerate}
-  Suppose that there is a classical algorithm for computing $f$ in time
-  $\bigo{t(n)}$ for all $x$ of length $n$, where $t(n) \ge n$ for all $n$. Then
-  a quantum computer can decide in worst-case time $\bigo{t(n)}$ whether or not
-  $f(x)$ is identically zero on inputs of length $n$.\footnote{Though this
-  theorem is based on a result in \cite{DJ92}, this particular formulation of
-  the result comes from \cite{BB92b}.}
+  Let $X \subseteq \zo^*$ be a language such that $B(X)$ holds, and suppose that
+  there is a classical algorithm that decides $X$ in time $\bigo{t(n)}$ for all
+  $x$ of length $n$, where $t(n) \ge n$ for all $n$. Then a quantum computer can
+  decide in worst-case time $\bigo{t(n)}$ whether or not $X$ contains any
+  strings of length $n$.\footnote{Though this theorem is based on a result in
+  \cite{DJ92}, this particular formulation of the result comes from
+  \cite{BB92b}.}
 \end{thm}
 
 We do not prove \cref{thm:promise} here, but we recommend that curious readers
-refer to \cite{DJ92}, which provides a fairly straightforward proof. Our proof
-of \cref{thm:bqp-beat-np} proceeds by using an enumeration of all
-nondeterministic Turing machines to construct a function that has the properties
-given in \cref{thm:promise} so that with an oracle for $f$, on input $n$, a
-quantum computer can decide in polynomial time if $f(x)=0$ for all $x\in \zo^n$,
-but no nondeterministic Turing machine can decide the same problem. \TODO{Is the
-input $n$?}
+refer to \cite{DJ92}, which provides a proof that is significantly less dense
+than one might expect. Our proof of \cref{thm:bqp-beat-np} proceeds by using an
+enumeration of all nondeterministic Turing machines to construct a language $Y$
+where $B(Y)$ holds so that with an oracle for $Y$, on input $1^n$, a quantum
+computer can decide in polynomial time if $Y$ contains any strings of length
+$n$, but no nondeterministic Turing machine can decide the same problem in
+polynomial time.
 
 \begin{mdframed}
 \begin{proof}[Proof of \cref{thm:bqp-beat-np}]
@@ -364,15 +367,13 @@ input $n$?}
               2^{\wp(n-1)} & \text{if $n>1$}.
              \end{cases}
   $$
-  We use these to construct a function $f$ that has the properties described
-  above. In particular, we define $f$ by a set $Y = \curl*{x\in \zo^* \mid
-  f(x)=1}$, i.e. $Y$ is the language decided by an oracle for $f$. We construct
-  $Y$ in stages, constructing $Y_1, Y_2, \dots$ such that $Y = \bigcup_{n\ge 1}
+  We use these to construct a language $Y$ where $B(Y)$ holds. We construct $Y$
+  in stages, constructing $Y_1, Y_2, \dots$ such that $Y = \bigcup_{n\ge 1}
   Y_n$. At the end of stage $n$, $Y$ will be defined for all strings of length
-  less than $\wp(n+1)$. We sometimes refer to $Y$ and each $Y_n$ as oracles, by
-  which we mean oracles that indicate membership in the sets $Y$ and $Y_n$
-  respectively. \TODO{Add intuitive explanation of what we add at each stage.}
-  Our construction is as follows:
+  less than $\wp(n+1)$. In particular, at each stage $n$, we ensure that $Y$
+  contains either 0 or $2^{\wp(n)-1}$-many strings of length $\wp(n)$, and
+  simultaneously that on input $1^{\wp(n)}$, any nondeterministic Turing machine
+  must take more than $2^{\wp(n)-1}$ steps. We construct $Y$ as follows.
   \begin{enumerate}
     \item Initially, set $Y_1=\emptyset$.
     \item At stage $n \ge 1$, simulate every path of nondeterministic machine
@@ -393,6 +394,64 @@ input $n$?}
           $2^{\wp(n)-1}$. Let $Y_{n+1} = Y_n \cup R_n$ and go to the next stage.
       \end{itemize}
   \end{enumerate}
+  Let $Y = \bigcup_{n\ge 1} Y_n$. Note that $B(Y)$ holds because we took care at
+  each step of either putting nothing in $Y$, or of putting exactly half the
+  strings of a given length (and we never put in strings of the same length more
+  than once). Now we define the language $S_Y$ as
+  $$
+    S_Y = \curl*{1^n \mid
+                 \mbox{$Y$ does not contain any strings of length $n$}}.
+  $$
+  \Cref{thm:promise} tells us that given an oracle for $Y$, a quantum computer
+  can decide $S_Y$ in linear time. To complete the proof, we must now show that
+  nondeterministic Turing machines must take exponential time to decide $S_Y$.
+  To do so, consider an arbitrary nondeterministic Turing machine $N_i$ that
+  purports to accept language $S_Y$. By definition of $\alpha$, there are
+  infinitely many integers $n$ such that $i = \alpha(n)$, so $Y$ is defined in
+  part based on $N_i$. For any such $n$, we claim that $N_i$ using an oracle for
+  $Y$ must take more than $2^{\wp(n)-1}$ steps on input $1^{\wp(n)}$. To prove
+  this claim, consider what happens when we run $N_i$ on input $1^{\wp(n)}$, but
+  with an oracle for $Y_n$. We consider three cases.
+  \begin{itemize}
+    \item If at least one path of the computation of $N_i^{Y_n}$ on $1^{\wp(n)}$
+      takes more than $2^{\wp(n)-1}$ steps, by construction, $Y_{n+1} = Y_n$ and
+      therefore $Y$ and $Y_n$ agree on all strings of length smaller than
+      $\wp(n+1) = 2^{\wp(n)}$. But then the first $2^{\wp(n)}$ steps of any
+      computation of $N_i$ on input $1^{\wp(n)}$ are identical regardless of
+      whether $Y$ or $Y_n$ is used as an oracle since the machine cannot
+      formulate questions long enough to distinguish between these oracles
+      within that time. Therefore, using oracle $Y$ as well, there is at least
+      one path of the computation of $N_i$ on $1^{\wp(n)}$ that takes more than
+      $2^{\wp(n)-1}$ steps.
+    \item If $N_i^{Y_n}$ rejects $1^{\wp(n)}$ within $2^{\wp(n)-1}$ steps, then
+      $Y$ and $Y_n$ agree on all strings of length smaller than $2^{\wp(n)}$
+      just as in the previous case. By the same argument, $N_i$ behaves
+      identically on input $1^{\wp(n)}$ regardless of whether it uses oracle $Y$
+      or $Y_n$. Therefore, $N_i$ rejects $1^{\wp(n)}$ also with oracle $Y$. But
+      $N_i^Y$ is assumed to recognize $S_Y$, and hence $1^{\wp(n)} \not\in S_Y$,
+      which means that $Y \cap \zo^{\wp(n)} \ne \emptyset$. This is impossible
+      since by construction no strings of length $\wp(n)$ are put into $Y$ in
+      this case.
+    \item If $N_i^{Y_n}$ accepts $1^{\wp(n)}$ within $2^{\wp(n)-1}$ steps,
+      consider the accepting path used in stage $n$ of the construction of $Y$.
+      The set $R_N$ is designed so that is contains none of the oracle questions
+      asked along this path. Since $Y_n$ and $Y$ differ on strings of length
+      smaller than $2^{\wp(n)}$ only in that the strings in $R_n$ belong to $Y$
+      but not to $Y_n$, the same accepting path of $N_i$ on $1^{\wp(n)}$ exists
+      when an oracle for $Y$ is used. Although $N_i^Y$ and $N_i^{Y_n}$ could
+      behave differently on all other paths, one accepting path is enough for a
+      nondeterministic machine to accept, and therefore $N_i^Y$ accepts
+      $1^{\wp(n)}$. But again $N_i^Y$ is assumed to recognize $S_Y$, and hence
+      $1^{\wp(n)} \in S_Y$, which means that $Y \cap \zo^{\wp(n)} = \emptyset$.
+      This is impossible since by construction $2^{\wp(n)-1}$ strings of length
+      $\wp(n)$ are put into $Y$ in this case.
+  \end{itemize}
+  Only the first case remains possible, and thus by Sherlock Holmes' principle
+  it is the truth. But that case implies that $N_i^Y$ on $1^{\wp(n)}$ takes more
+  than $2^{\wp(n)-1}$ steps on at least one of its computation paths. Since this
+  occurs for infinitely many values of $n$, any nondeterministic Turing machine
+  that accepts $S_Y$ with an oracle for $Y$ must spend exponential time on
+  infinitely many inputs.
 \end{proof}
 \end{mdframed}
 
