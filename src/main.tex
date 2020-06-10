@@ -107,9 +107,21 @@ $$
 where $\sum_{x \in \zo^m} \abs*{\alpha_x}^2 = 1$. When the system is observed,
 it is revealed to be in state $\reg*{x}$ with probability $\abs*{\alpha_x}^2$
 for each $x \in \zo^m$. We will sometimes denote the state $\reg*{xy}$ as
-$\reg*{x}\reg*{y}$.
+$\reg*{x}\reg*{y}$. It will also often be useful to think of quantum states as
+vectors of amplitudes, where the amplitudes are given in the lexicographic order
+of their associated basic states. For example, a 2-qubit register in the state
+$$
+  \alpha_{00} \reg*{00}
+  + \alpha_{01} \reg*{01}
+  + \alpha_{10} \reg*{10}
+  + \alpha_{11} \reg*{11}
+$$
+can be represented by the vector $\paren*{\alpha_{00}, \alpha_{01}, \alpha_{10},
+\alpha_{11}}$.
 
 \subsection{Quantum operations}
+Now that we have a model of memory, we can define the quantum operations that
+act on memory.
 \begin{defn}[Quantum operation {\cite[p. 210]{AB09}}]
   \label{defn:op}
   A \emph{quantum operation} for an $m$-qubit register is a funciton $F :
@@ -119,11 +131,101 @@ $\reg*{x}\reg*{y}$.
     \emph{Linearity:} $F$ is a linear function. That is, for every $\vec{v} \in
     \CC^{2^n}$, $F(\vec{v}) = \sum_x \vec{v}_x F(\reg*{x})$. \\
     \emph{Norm preservation:} $F$ maps unit vectors to unit vectors. That is,
-    for every $\vec{v}$ with $\norm*{\vec{v}}_2=1$, $\norm*{F(\vec{v})}_2=1$.
+    for every $\vec{v}$ with $\norm*{\vec{v}}_2=1$,
+    $\norm*{F(\vec{v})}_2=1$.\footnote{Here, $\norm*{\vec{v}}_2$ denotes the
+    $\ell^2$ norm of $\vec{v}$, i.e. $\norm*{\vec{v}} = \sqrt{\sum_i
+    \abs*{\vec{v}_i}^2}$.}
   \end{adjustwidth}
 \end{defn}
+The linearity condition comes from quantum mechanics, and the norm preservation
+condition is natural since only unit vectors can describe states. We now
+describe several specific quantum operations.
+\begin{adjustwidth}{0.25in}{0in}
+  \emph{Flipping qubits:} If we wish to flip the first qubit of an $m$-qubit
+  register, then this can be done by mapping the basis state $\reg*{b, x}$ to
+  $\reg*{1-b, x}$. Since we only modify the first qubit, we can instead use the
+  shorthand $\reg*{b} \mapsto \reg*{1-b}$. Also note that because quantum
+  operations are linear, it suffices to describe their actions on a basis. Thus,
+  the bit flipping operation can be described as $\qz \mapsto \qo$ and $\qo
+  \mapsto \qz$. \vspace{0.5\baselineskip}
+
+  \noindent \emph{Reordering qubits:} If we wish to exchange the values of two
+  qubits, it suffices to use the operation
+  \begin{align*}
+    \reg*{00} &\mapsto \reg*{00} \\
+    \reg*{01} &\mapsto \reg*{10} \\
+    \reg*{10} &\mapsto \reg*{01} \\
+    \reg*{11} &\mapsto \reg*{11}.
+  \end{align*}
+  If we interpret quantum states as vectors, then this operation can be
+  described by the matrix
+  $$
+    \begin{pmatrix}
+      1 & 0 & 0 & 0 \\
+      0 & 0 & 1 & 0 \\
+      0 & 1 & 0 & 0 \\
+      0 & 0 & 0 & 1
+    \end{pmatrix}.
+  $$ \vspace{0.5\baselineskip}
+
+  \noindent \emph{AND of two bits:} Suppose that we want to take the AND of two
+  qubits. It may be tempting to write this as $\reg*{b_1b_2} \mapsto \reg*{b_1
+  \land b_2}\reg*{b_2}$, but this operation is not norm-preserving. To handle
+  this, instead of writing to the first bit, we write to an additional third
+  bit, which we assume starts as zero. We use the operation
+  $$
+    \reg*{b_1}\reg*{b_2}\reg*{b_3} \mapsto \reg*{b_1}\reg*{b_2}\reg*{b_3 \xor
+    (b_1 \land b_2)},
+  $$
+  where $\xor$ denotes the XOR operation. We can also describe this operation
+  with the matrix
+  $$
+    \begin{pmatrix}
+      1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+      0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+      0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+      0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+      0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+      0 & 0 & 0 & 0 & 0 & 0 & 1 & 0
+    \end{pmatrix}.
+  $$
+  This operation is known as the \emph{Toffoli gate}. It is also possible to
+  obtain a quantum OR operation. \vspace{0.5\baselineskip}
+
+  \noindent \emph{The Hadamard operation:} Thus far, we have only seen
+  operations that permute amplitudes, but we are not restricted to such
+  operations. One operation that does otherwise is the \emph{Hadamard}
+  operation, which can be described by the mapping
+  \begin{align*}
+    \qz &\mapsto \frac{1}{\sqrt{2}} \qz + \frac{1}{\sqrt{2}} \qo \\
+    \qo &\mapsto \frac{1}{\sqrt{2}} \qz - \frac{1}{\sqrt{2}} \qo,
+  \end{align*}
+  or by the matrix
+  $$
+    \frac{1}{\sqrt{2}} \begin{pmatrix}
+      1 & 1 \\
+      1 & -1
+    \end{pmatrix}.
+  $$
+\end{adjustwidth}
 
 \subsection{Quantum Turing machines and the class $\BQP$}
+Applying many operations to the entirety of a quantum register may not be
+feasible, so we define quantum computation using local operations: operations
+that act on a finite number of qubits. We call these operations
+\emph{elementary}.
+\begin{defn}[Elementary quantum operations or quantum gates {\cite[p.
+             213]{AB09}}]
+  A quantum operation is called \emph{elementary}, or sometimes a \emph{quantum
+  gate}, if it acts on three or fewer qubits of the register.
+\end{defn}
+To describe an elementary operation, it suffices to describe three qubit
+positions and a matrix. With elementary quantum operations defined, we have all
+we need to define quantum computation and $\BQP$, the quantum analog of $\PP$ or
+$\BPP$.
+
 \begin{defn}[Quantum computation and the class $\BQP$ {\cite[p. 213]{AB09}}]
   \label{defn:bqp}
   Let $f : \zo^* \to \zo$ and $T : \NN \to \NN$ be some functions. We say that
@@ -148,39 +250,75 @@ $\reg*{x}\reg*{y}$.
   $p(n)$-time.
 \end{defn}
 
+Given our quantum analogs of the AND and OR operations, along with the inherent
+randomness built into $\BQP$, the following result should be unsurprising.
+
 \begin{thm}
+  \label{thm:bpp-bqp}
   $\BPP \subseteq \BQP$.
 \end{thm}
 
+For a proof of \cref{thm:bpp-bqp}, see page 215 of \cite{AB09}. The above
+theorem gives us a decent lower bound on the power of $\BQP$. We do not have
+much of an upper bound on the power of $\BQP$, but we do know that $\BQP$ is not
+infinitely powerful.
+
 \begin{thm}
+  \label{thm:bqp-pspace}
   $\BQP \subseteq \PSPACE$.
 \end{thm}
 
+A proof of \cref{thm:bqp-pspace}, see page 230 of \cite{AB09}. Most people,
+however, believe that $\BQP$ is not as powerful as $\NP$.
+
 \begin{conj}
+  \label{conj:np-bqp}
   $\NP \not\subseteq \BQP$.
 \end{conj}
 
+Perhaps the most compelling evidence for this is the following result.
+
 \begin{thm}[\cite{BBBV97}]
+  \label{thm:no-black-box}
   Relative to an oracle chosen uniformy at random, with probability 1, the class
   $\NP$ cannot be solved on a quantum Turing machine in time $\smallo{2^{n/2}}$.
 \end{thm}
-``There is no black-box approach to solving $\NP$-complete problems using some
-uniquely quantum features of QTMs.''
+
+The interpretation given in \cite{BBBV97} of this result is that ``there is no
+black-box approach to solving $\NP$-complete problems using some uniquely
+quantum features of QTMs.'' Still, there is evidence that quantum computers have
+at least some more power than classical computers.
 
 \begin{conj}
   $\BPP \subsetneq \BQP$.
 \end{conj}
 
+This is supported by the fact that there is a polynomial-time quantum algorithm
+for factoring integers.
+
 \begin{thm}[\cite{Sho97}]
+  \label{thm:shor}
   $\lang{Factoring} \in \BQP$.
 \end{thm}
+
+\Cref{thm:shor} is interesting not only because there is no known
+polynomial-time randomized algorithm for $\lang{Factoring}$, but also because
+many cryptosystems rely on $\lang{Factoring}$ being hard. If quantum computers
+become reliable and common enough, then those cryptosystems will no longer be
+secure. Readers curious about Shor's algorithm can of course refer to
+\cite{Sho97}, but may find the explanation beginning on page 221 of \cite{AB09}
+easier to follow.
+
+Given \cref{conj:np-bqp} and \cref{thm:no-black-box}, the following result may
+be surprising.
 
 \begin{thm}[\cite{BB92}]
   Under appropriate oracles, there is a decision problem that can be solved in
   polynomial time on a quantum computer that would require exponential time on a
   classical nondeterministic computer.
 \end{thm}
-``Quantum can beat nondeterminism.''
+The authors of \cite{BB92} call this ``quantum can beat nondeterminism,'' and it
+is this result that we will prove in the remainder of this paper.
 
 \section{Quantum oracles}
 \TODO{Refer to {\cite{BBBV97}}.}
