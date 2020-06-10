@@ -19,18 +19,18 @@ conjectures that every physically realizable computation model can be
 simulated by a Turing machine with polynomial overhead in runtime, but
 physicist Richard Feynman \cite{Fey82} notes that the obvious classical
 algorithm for simulating a quantum system of $n$ particles runs exponentially
-in $n$ and suggests that computers be equipped with quantum mechanical gates
+in $n$, and he suggests that computers be equipped with quantum mechanical gates
 in order to enable efficient simulation of quantum systems. If quantum systems
 cannot be efficiently simulated by Turing machines --- and if general-purpose
 quantum computers are physically realizable --- then the strong Church-Turing
 thesis is false, and we require a new model of computation. Though questions
 of the feasibility and relative efficiency of quantum computers are yet
 unanswered, this uncertainty has not prevented theorists from developing
-quantum computational models. In this paper, we will formalize quantum computing
-and quantum oracles, and then we will describe a few results from quantum
-complexity theory, with emphasis on the result from \cite{BB92a} that relative to
-certain oracles, quantum computers are more powerful than nondeterministic
-computers, or in the words of  Berthiaume and Brassard, that ``quantum can beat
+quantum computational models. In this paper, we will formalize quantum
+computing, and then we will describe a few results from quantum complexity
+theory, with emphasis on the result from \cite{BB92a} that relative to certain
+oracles, quantum computers are more powerful than nondeterministic computers, or
+in the words of  Berthiaume and Brassard, that ``quantum can beat
 nondeterminism.''
 
 
@@ -38,7 +38,7 @@ nondeterminism.''
 Before we attempt to formalize quantum computation, it will help to understand
 the physical ideas behind such a formalization. To illustrate these principles,
 we turn to the two-slit experiment. In the two-slit experiment, a photon source
-id placed on one side of a wall that has two slits in it. On the other side is
+is placed on one side of a wall that has two slits in it. On the other side is
 an array of detectors that light up when hit by a photon. Consider the rate at
 which photons hit these detectors. If one slit is covered, we might expect that
 the detector behind the open slit will receive the highest rate of photons per
@@ -66,7 +66,7 @@ This phenomenon can only be explained by quantum mechanics. When a photon leaves
 the photon source, it does not follow a single path to some detector; rather, it
 instantaneously explores all possible paths, where each path has some associated
 \emph{amplitude}, which may be positive or negative (or zero). If two paths
-arrive at the same detector with opposite signs, then they cancel-out, or
+arrive at the same detector with opposite amplitudes, then they cancel-out, or
 \emph{interfere}. However, perhaps we are skeptical of this all-paths
 exploration, and we decide to add detectors at each slit that light up when a
 photon passes through the slit. If photons are truly exploring all possible
@@ -97,7 +97,7 @@ When we observe the qubit, it is revealed to be in state $\qz$ with probability
 $\abs*{\alpha_0}^2$ and state $\qo$ with probability $\abs*{\alpha_1}^2$. Once
 the qubit is measured, its amplitude wave \emph{collapses}, and the values of
 its amplitudes are lost. Our state of memory, then, is an $m$-qubit register
-$\reg*{b_1, b_2, \dots, b_m}$ described by a superposition of the form
+$\reg*{b_1 b_2 \dots b_m}$ described by a superposition of the form
 $$
   \alpha_{0\dots 0}\reg*{0\dots 0}
   + \alpha_{0\dots 1}\reg*{0\dots 1}
@@ -131,7 +131,7 @@ act on memory.
     \emph{Linearity:} $F$ is a linear function. That is, for every $\vec{v} \in
     \CC^{2^n}$, $F(\vec{v}) = \sum_x \vec{v}_x F(\reg*{x})$. \\
     \emph{Norm preservation:} $F$ maps unit vectors to unit vectors. That is,
-    for every $\vec{v}$ with $\norm*{\vec{v}}_2=1$,
+    for every $\vec{v}$ with $\norm*{\vec{v}}_2=1$, we have
     $\norm*{F(\vec{v})}_2=1$.\footnote{Here, $\norm*{\vec{v}}_2$ denotes the
     $\ell^2$ norm of $\vec{v}$, i.e. $\norm*{\vec{v}} = \sqrt{\sum_i
     \abs*{\vec{v}_i}^2}$.}
@@ -152,10 +152,10 @@ describe several specific quantum operations.
   \noindent \emph{Reordering qubits:} If we wish to exchange the values of two
   qubits, it suffices to use the operation
   \begin{align*}
-    \reg*{00} &\mapsto \reg*{00} \\
-    \reg*{01} &\mapsto \reg*{10} \\
-    \reg*{10} &\mapsto \reg*{01} \\
-    \reg*{11} &\mapsto \reg*{11}.
+    \reg*{00} \mapsto \reg*{00} &&
+    \reg*{01} \mapsto \reg*{10} &&
+    \reg*{10} \mapsto \reg*{01} &&
+    \reg*{11} \mapsto \reg*{11}.
   \end{align*}
   If we interpret quantum states as vectors, then this operation can be
   described by the matrix
@@ -221,10 +221,10 @@ that act on a finite number of qubits. We call these operations
   A quantum operation is called \emph{elementary}, or sometimes a \emph{quantum
   gate}, if it acts on three or fewer qubits of the register.
 \end{defn}
-To describe an elementary operation, it suffices to describe three qubit
-positions and a matrix. With elementary quantum operations defined, we have all
-we need to define quantum computation and $\BQP$, the quantum analog of $\PP$ or
-$\BPP$.
+To describe an elementary operation, it suffices to describe one, two, or three
+qubit positions and a matrix of size $2 \times 2$, $4 \times 4$, or $8 \times
+8$. With elementary quantum operations defined, we have all we need to define
+quantum computation and $\BQP$, the quantum analog of $\PP$ and $\BPP$.
 
 \begin{defn}[Quantum computation and the class $\BQP$ {\cite[p. 213]{AB09}}]
   \label{defn:bqp}
@@ -237,7 +237,7 @@ $\BPP$.
   \begin{enumerate}
     \item Initialize an $m$-qubit quantum register to the state
       $\reg*{x0^{n-m}}$ (i.e., $x$ padded with zeroes), where $m \le T(n)$.
-    \item Apply ons after the other $T(n)$ elementary quantum operations $F_1,
+    \item Apply one after the other $T(n)$ elementary quantum operations $F_1,
       \dots, F_T$ to the register.
     \item Measure the register and let $Y$ denote the obtained value. (That is,
       if $\vec{v}$ is the final state of the register, then $Y$ is a random
@@ -434,7 +434,7 @@ polynomial time.
       this case.
     \item If $N_i^{Y_n}$ accepts $1^{\wp(n)}$ within $2^{\wp(n)-1}$ steps,
       consider the accepting path used in stage $n$ of the construction of $Y$.
-      The set $R_N$ is designed so that is contains none of the oracle questions
+      The set $R_n$ is designed so that is contains none of the oracle questions
       asked along this path. Since $Y_n$ and $Y$ differ on strings of length
       smaller than $2^{\wp(n)}$ only in that the strings in $R_n$ belong to $Y$
       but not to $Y_n$, the same accepting path of $N_i$ on $1^{\wp(n)}$ exists
@@ -463,8 +463,8 @@ may find \cite{BB92b} to be an enjoyable survey on some early results in quantum
 computing. As well, \cite{AB09} goes into more depth defining quantum
 computation and describes a few quantum algorithms in detail. Readers can also
 refer to \cite{Wig19} for explanations of quantum interactive proofs and quantum
-randomness, and some alternative views on quantum computation. Finally, readers
-interested in quantum cryptography may enjoy \cite{BEM+07}.
+randomness, and some alternative views of quantum computation. Finally, readers
+interested in learning about quantum cryptography may enjoy \cite{BEM+07}.
 
 
 \nocite{*}
