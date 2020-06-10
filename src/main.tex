@@ -34,17 +34,51 @@ computers, or in the words of  Berthiaume and Brassard, that ``quantum can beat
 nondeterminism.''
 
 
-\section{Quantum mechanics}
+\section{Quantum superposition: the two-slit experiment}
+Before we attempt to formalize quantum computation, it will help to understand
+the physical ideas behind such a formalization. To illustrate these principles,
+we turn to the two-slit experiment. In the two-slit experiment, a photon source
+id placed on one side of a wall that has two slits in it. On the other side is
+an array of detectors that light up when hit by a photon. Consider the rate at
+which photons hit these detectors. If one slit is covered, we might expect that
+the detector behind the open slit will receive the highest rate of photons per
+hour, which is indeed what happens, as depicted in \cref{fig:two-slit-1}.
+
 \begin{figure}[H]
   \includegraphics[width=\textwidth]{two-slit-1}
   \caption{\cite[p. 203]{AB09}}
   \label{fig:two-slit-1}
 \end{figure}
+
+If we uncover both slits, then we may expect that a detector will receive a rate
+of photons equal to the sum of the rates it receives when one of each of the
+slits is covered, but this is not what happens. In fact, as depicted in
+\cref{fig:two-slit-2}, some detectors even receive a lower rate of photons than
+this sum.
+
 \begin{figure}[H]
   \includegraphics[width=\textwidth]{two-slit-2}
   \caption{\cite[p. 203]{AB09}}
   \label{fig:two-slit-2}
 \end{figure}
+
+This phenomenon can only be explained by quantum mechanics. When a photon leaves
+the photon source, it does not follow a single path to some detector; rather, it
+instantaneously explores all possible paths, where each path has some associated
+\emph{amplitude}, which may be positive or negative (or zero). If two paths
+arrive at the same detector with opposite signs, then they cancel-out, or
+\emph{interfere}. However, perhaps we are skeptical of this all-paths
+exploration, and we decide to add detectors at each slit that light up when a
+photon passes through the slit. If photons are truly exploring all possible
+paths, then we might expect to measure some of the same photons at both slits.
+But now that we are measuring the photons at the slits, we instead see what we
+originally expected: each detector receives a rate of photons equal to the
+sum of the rates of photons it receives when one of each of the slits is
+covered. This experiment gives us an idea of both some of the strengths and
+weaknesses of quantum computers: if we can in some sense ``explore all paths,''
+then we may be able to simulate nondeterminism efficiently, but the nature of
+our quantum parallelism must play nicely with quantum interference, and once we
+measure a result, we lose any parallelism that we may have.
 
 
 \section{Modeling quantum computation}
