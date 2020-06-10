@@ -82,6 +82,32 @@ measure a result, we lose any parallelism that we may have.
 
 
 \section{Modeling quantum computation}
+We begin our model with a description of memory. On a classical computer, we
+normally model memory as a sequence of bits, each of which can be 0 or 1. In
+our model of quantum computers, the smallest piece of memory is the
+\emph{qubit}, which can take on the basic states $\qz$ and $\qo$, or may also be
+in a \emph{superposition} of these states of the form
+$$
+  \alpha_0\qz + \alpha_1\qo,
+$$
+where $\alpha_0, \alpha_1 \in \CC$ are \emph{amplitudes} satisfying
+$\abs*{\alpha_0}^2 + \abs*{\alpha_1}^2 = 1$.\footnote{Recall that for a complex
+number $z = a + bi$ where $i=\sqrt{-1}$, we have $\abs*{z} = \sqrt{a^2+b^2}$.}
+When we observe the qubit, it is revealed to be in state $\qz$ with probability
+$\abs*{\alpha_0}^2$ and state $\qo$ with probability $\abs*{\alpha_1}^2$. Once
+the qubit is measured, its amplitude wave \emph{collapses}, and the values of
+its amplitudes are lost. Our state of memory, then, is an $m$-qubit register
+$\reg*{b_1, b_2, \dots, b_m}$ described by a superposition of the form
+$$
+  \alpha_{0\dots 0}\reg*{0\dots 0}
+  + \alpha_{0\dots 1}\reg*{0\dots 1}
+  + \dots
+  + \alpha_{1\dots 1} \reg*{1\dots 1},
+$$
+where $\sum_{x \in \zo^m} \abs*{\alpha_x}^2 = 1$. When the system is observed,
+it is revealed to be in state $\reg*{x}$ with probability $\abs*{\alpha_x}^2$
+for each $x \in \zo^m$. We will sometimes denote the state $\reg*{xy}$ as
+$\reg*{x}\reg*{y}$.
 
 \subsection{Quantum operations}
 \begin{defn}[Quantum operation {\cite[p. 210]{AB09}}]
