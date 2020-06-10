@@ -9,6 +9,7 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage[english]{babel}
+\usepackage{changepage}
 \usepackage{dsfont}
 \usepackage[shortlabels]{enumitem}
 \usepackage{float}
@@ -28,6 +29,7 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{listings}
 \usepackage{sectsty}
+\usepackage{shadethm}
 \usepackage{soul}
 \usepackage{tabularx}
 \usepackage{tikz}
@@ -50,34 +52,38 @@
 %%%%%%%%%%%%%%%%
 \theoremstyle{plain}
 
-\newtheorem{thm}{Theorem}[subsection]
-\newtheorem*{thm*}{Theorem}
+\newshadetheorem{thm}{Theorem}[subsection]
+%\newshadetheorem*{thm*}{Theorem}
 \def\thmautorefname{Theorem}
 
-\newtheorem{lem}[thm]{Lemma}
-\newtheorem*{lem*}{Lemma}
+\newshadetheorem{lem}[thm]{Lemma}
+%\newshadetheorem*{lem*}{Lemma}
 \def\lemautorefname{Lemma}
 
-\newtheorem{claim}[thm]{Claim}
-\newtheorem*{claim*}{Claim}
+\newshadetheorem{conj}[thm]{Conjecture}
+%\newshadetheorem*{conj*}{Conjecture}
+\def\claimautorefname{Conjecture}
+
+\newshadetheorem{claim}[thm]{Claim}
+%\newshadetheorem*{claim*}{Claim}
 \def\claimautorefname{Claim}
 
-\newtheorem{cor}[thm]{Corollary}
-\newtheorem*{cor*}{Corollary}
+\newshadetheorem{cor}[thm]{Corollary}
+%\newshadetheorem*{cor*}{Corollary}
 \def\corautorefname{Corollary}
 
 
 \theoremstyle{definition}
 
-\newtheorem{defn}[thm]{Definition}
-\newtheorem*{defn*}{Definition}
+\newshadetheorem{defn}[thm]{Definition}
+%\newshadetheorem*{defn*}{Definition}
 \def\defnautorefname{Definition}
 
 
 \theoremstyle{remark}
 
-\newtheorem{remark}[thm]{Remark}
-\newtheorem*{remark*}{Remark}
+\newshadetheorem{remark}[thm]{Remark}
+%\newshadetheorem*{remark*}{Remark}
 \def\remarkautorefname{Remark}
 
 
@@ -116,8 +122,9 @@
 \newcommand{\mfrak}{\mathfrak}
 
 % Sets of numbers
-\newcommand{\RR}{\mathbb{R}}
 \newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
 \newcommand{\FF}{\mathbb{F}}
 
 % Types
@@ -140,6 +147,7 @@
 \newcommand{\EE}{\cc{E}}
 \newcommand{\BPP}{\cc{BPP}}
 \newcommand{\BQP}{\cc{BQP}}
+\newcommand{\PSPACE}{\cc{PSPACE}}
 
 % Languages
 \newcommand{\SAT}{\lang{SAT}}
